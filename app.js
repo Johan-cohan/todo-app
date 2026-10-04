@@ -34,6 +34,7 @@ function renderTasks() {
     toggleButton.textContent = task.running ? "⏸" : "⏵";
 
     const timeSpan = document.createElement("span");
+    timeSpan.className = "time";
     timeSpan.textContent = formatTime(task.seconds);
 
     toggleButton.addEventListener("click", () => {
@@ -93,7 +94,14 @@ function formatTime(totalSeconds) {
 }
 
 function toggleTimer(index) {
-  tasks[index].running = !tasks[index].running;
+  if (tasks[index].running) {
+    tasks[index].running = false;
+  } else {
+    tasks.forEach((task) => {
+      task.running = false;
+    });
+    tasks[index].running = true;
+  }
   saveTasks();
   renderTasks();
 }
