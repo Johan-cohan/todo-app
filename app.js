@@ -33,6 +33,9 @@ function renderTasks() {
     editButton.addEventListener("click", () => {
       startEdit(index);
     });
+    span.addEventListener("dblclick", () => {
+      startEdit(index);
+    });
     deleteButton.addEventListener("click", () => {
       removeTask(index);
     });
@@ -117,6 +120,9 @@ function startEdit(index) {
     if (event.key === "Escape") cancel();
   });
   input.addEventListener("blur", save);
+  span.addEventListener("dblclick", () => {
+    startEdit(index);
+  });
 }
 
 function addTask() {
