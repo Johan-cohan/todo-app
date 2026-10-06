@@ -21,12 +21,18 @@ function renderTasks() {
     const span = document.createElement("span");
     const deleteButton = document.createElement("button");
     const toggleButton = document.createElement("button");
+    const editButton = document.createElement("button");
+
+    editButton.className = "edit-btn";
+    editButton.setAttribute("aria-label", "Редактировать задачу");
     toggleButton.className = "toggle-btn";
+    span.className = "task-text";
+    span.textContent = task.text;
     deleteButton.className = "delete-btn";
 
-    span.textContent = task.text;
-    deleteButton.textContent = "Х";
-
+    editButton.addEventListener("click", () => {
+      startEdit(index);
+    });
     deleteButton.addEventListener("click", () => {
       removeTask(index);
     });
@@ -41,6 +47,7 @@ function renderTasks() {
       toggleTimer(index);
     });
 
+    li.appendChild(editButton);
     li.appendChild(span);
     li.appendChild(timeSpan);
     li.appendChild(toggleButton);
@@ -69,6 +76,47 @@ function loadTasks() {
   });
   saveTasks();
   renderTasks();
+}
+
+function startEdit(index) {
+  const li = taskList.children[index];
+  const span = li.querySelector(".task-text");
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = tasks[index].text;
+  input.className = "task-input";
+
+  li.replaceChild(input, span);
+  input.focus();
+  input.select();
+
+  let saved = false;
+
+  function save() {
+    if (saved) return;
+    saved = true;
+
+    const newText = input.value.trim();
+    if (newText) {
+      tasks[index].text = newText;
+      saveTasks();
+      span.textContent = newText;
+    }
+    li.replaceChild(span, input);
+  }
+
+  function cancel() {
+    if (saved) return;
+    saved = true;
+    li.replaceChild(span, input);
+  }
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") save();
+    if (event.key === "Escape") cancel();
+  });
+  input.addEventListener("blur", save);
 }
 
 function addTask() {
@@ -103,9 +151,18 @@ function toggleTimer(index) {
     tasks[index].running = true;
   }
   saveTasks();
-  renderTasks();
+  updateToggleButtons();
 }
-
+function updateToggleButtons() {
+  tasks.forEach((task, index) => {
+    const li = taskList.children[index];
+    if (!li) return;
+    const toggleButton = li.querySelector(".toggle-btn");
+    if (toggleButton) {
+      toggleButton.textContent = task.running ? "⏸" : "⏵";
+    }
+  });
+}
 addButton.addEventListener("click", addTask);
 
 taskInput.addEventListener("keydown", (event) => {
@@ -115,18 +172,19 @@ taskInput.addEventListener("keydown", (event) => {
 });
 
 setInterval(() => {
-  let changed = false;
-
-  tasks.forEach((task) => {
+  tasks.forEach((task, index) => {
     if (task.running) {
       task.seconds++;
-      changed = true;
+
+      const li = taskList.children[index];
+      if (li) {
+        const timeSpan = li.querySelector(".time");
+        if (timeSpan) {
+          timeSpan.textContent = formatTime(task.seconds);
+        }
+      }
     }
   });
-
-  if (changed) {
-    renderTasks();
-  }
 }, 1000);
 window.addEventListener("beforeunload", () => {
   saveTasks();

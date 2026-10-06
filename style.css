@@ -73,12 +73,25 @@ body {
     border-radius: 8px;
     font-size: 15px;
 }
-#taskList li span:first-child {
+#taskList .task-text {
     flex:1;
     min-width: 0;
     word-break: break-word;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
 }
-
+#taskList .task-input {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 8px;
+    border: 1px solid #6366f1;
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    background: white;
+}
 #taskList .toggle-btn {
     background: #6366f1;
     color: white;
@@ -97,22 +110,88 @@ body {
 #taskList .toggle-btn:hover {
     background: #4f46e5;
 }
-#taskList .delete-btn {
+#taskList .delete-btn{
     background: transparent;
-    color: #ef4444;
     border: none;
-    font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
-    padding: 4px 8px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
     border-radius: 4px;
-    transition: background 0.2s;
+    position: relative;
+    transition: background 0.15s, opacity 0.15s;
     flex-shrink: 0;
+    opacity: 0;
+}
+#taskList .edit-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s, opacity 0.15s;
+    flex-shrink: 0;
+    opacity: 0;
+    color: #bbb;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#taskList .edit-btn::before {
+    content: "✎";
+}
+#taskList li:hover .edit-btn{
+    opacity: 1;
+}
+#taskList .edit-btn:hover {
+    background: #e0e7ff;
+    color: #6366f1
+}
+
+#taskList li:hover .delete-btn {
+    opacity: 1;
+}
+
+#taskList .delete-btn::before,
+#taskList .delete-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    background: #bbb;
+    border-radius: 1px;
+    transition: background 0.15s;
+}
+
+#taskList .delete-btn::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+#taskList .delete-btn::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 #taskList .delete-btn:hover {
     background: #fee2e2;
 }
+
+#taskList .delete-btn:hover::before,
+#taskList .delete-btn:hover::after {
+    background: #ef4444;
+}
+
+@media (hover: none) {
+    #taskList .delete-btn {
+        opacity: 1;
+    }
+}
+
 #taskList .time {
     font-family: 'Courier New', monospace;
     font-size: 14px;
