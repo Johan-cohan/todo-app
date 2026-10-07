@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Button test</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+    (function() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        }
+    })();
+    </script>
 </head>
 <body>
     <main class="app">
+        
         <div class="input-row">
             <input id="taskInput" type="text" placeholder="Что нужно сделать?">
             <button id="addButton">Добавить</button>
@@ -15,6 +24,7 @@
         <ul id="taskList"></ul>
         <p id="taskCounter" class="task-counter">Всего: 0</p>
         <p id="emptyMessage" class="empty-message">Пока пусто. Добавь первую задачу 👆</p>
+        <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">🌃</button>
     </main>
     
     <script src="app.js"></script>

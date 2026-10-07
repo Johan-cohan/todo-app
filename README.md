@@ -1,7 +1,5 @@
 # Todo App
 
-# Todo App
-
 ![Скриншот приложения](./todo-app.png)
 
 Простой и удобный список задач на чистом JavaScript.

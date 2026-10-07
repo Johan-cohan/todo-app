@@ -3,6 +3,8 @@ const addButton = document.getElementById("addButton");
 const taskList = document.getElementById("taskList");
 const taskCounter = document.getElementById("taskCounter");
 const emptyMessage = document.getElementById("emptyMessage");
+const themeToggle = document.getElementById("themeToggle");
+const THEME_KEY = "theme";
 
 let tasks = [];
 const STORAGE_KEY = "tasks";
@@ -60,6 +62,30 @@ function renderTasks() {
 
   taskCounter.textContent = `Всего: ${tasks.length}`;
 }
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeToggle.textContent = "🌇";
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+    themeToggle.textContent = "🌃";
+  }
+}
+
+function initTheme() {
+  const saveTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(saveTheme === "dark" ? "dark" : "light");
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const newTheme = isDark ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, newTheme);
+  applyTheme(newTheme);
+}
+
+themeToggle.addEventListener("click", toggleTheme);
 
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -120,9 +146,6 @@ function startEdit(index) {
     if (event.key === "Escape") cancel();
   });
   input.addEventListener("blur", save);
-  span.addEventListener("dblclick", () => {
-    startEdit(index);
-  });
 }
 
 function addTask() {
@@ -195,4 +218,5 @@ setInterval(() => {
 window.addEventListener("beforeunload", () => {
   saveTasks();
 });
+initTheme();
 loadTasks();

@@ -3,15 +3,57 @@
     margin: 0;
     padding: 0;
 }
+:root {
+    --bg: #f4f4f8;
+    --card-bg: #fff;
+    --task-bg: #f9f9fb;
+    --input-bg: #fff;
 
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --text-light: #999;
+    --text-very-light: #bbb;
+
+    --border: #ddd;
+
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #e0e7ff;
+
+    --danger: #ef4444;
+    --danger-bg: #fee2e2;
+}
+[data-theme="dark"] {
+    --bg: #1a1a1a;
+    --card-bg: #2a2a2a;
+    --task-bg: #333;
+    --input-bg: #2a2a2a;
+
+    --text: #f4f4f8;
+    --text-muted: #999;
+    --text-light: #777;
+    --text-very-light: #555;
+
+    --border: #444;
+
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --primary-light: #3730a3;
+
+    --danger: #f87171;
+    --danger-bg: #7f1d1d;
+}
 body {
     font-family: system-ui, -apple-system, sans-serif;
-    background-color: #f4f4f8;
+    background-color: var(--bg);
     display:flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     padding: 40px 20px;
+}
+body, .app, #taskList li, .input-row input, .input-row button {
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 .app {
     display: flex;
@@ -19,7 +61,7 @@ body {
     gap:12px;
     width: 100%;
     max-width: 500px;
-    background: white;
+    background: var(--card-bg);
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
@@ -35,19 +77,19 @@ body {
     flex: 1;
     min-width: 0;
     padding: 10px 20px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--text-very-light);
     border-radius: 8px;
     font-size: 15px;
     outline: none;
     transition: border-color 0.2s;
 }
 .input-row input:focus {
-    border-color: #6366f1;
+    border-color: var(--primary);
 }
 .input-row button {
     padding: 10px 16px;
-    background: #6366f1;
-    color: white;
+    background: var(--primary);
+    color: var(--card-bg);
     border: none;
     border-radius: 8px;
     font-size: 15px;
@@ -56,7 +98,7 @@ body {
 
 }
 .input-row button:hover {
-    background: #4f46e5;
+    background: var(--primary-hover);
 }
 #taskList {
     list-style: none;
@@ -69,7 +111,7 @@ body {
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
-    background: #f9f9fb;
+    background: var(--task-bg);
     border-radius: 8px;
     font-size: 15px;
 }
@@ -85,16 +127,16 @@ body {
     flex: 1;
     min-width: 0;
     padding: 4px 8px;
-    border: 1px solid #6366f1;
+    border: 1px solid var(--primary);
     border-radius: 4px;
     font-size: 15px;
     font-family: inherit;
     outline: none;
-    background: white;
+    background: var(--card-bg);
 }
 #taskList .toggle-btn {
-    background: #6366f1;
-    color: white;
+    background: var(--primary);
+    color: var(--card-bg);
     border: none;
     border-radius: 50%;
     width: 32px;
@@ -108,7 +150,7 @@ body {
     flex-shrink: 0;
 }
 #taskList .toggle-btn:hover {
-    background: #4f46e5;
+    background: var(--primary-hover);
 }
 #taskList .delete-btn{
     background: transparent;
@@ -134,7 +176,7 @@ body {
     transition: background 0.15s, color 0.15s, opacity 0.15s;
     flex-shrink: 0;
     opacity: 0;
-    color: #bbb;
+    color: var(--border);
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -148,8 +190,8 @@ body {
     opacity: 1;
 }
 #taskList .edit-btn:hover {
-    background: #e0e7ff;
-    color: #6366f1
+    background: var(--primary-light);
+    color: var(--primary)
 }
 
 #taskList li:hover .delete-btn {
@@ -164,7 +206,7 @@ body {
     left: 50%;
     width: 12px;
     height: 2px;
-    background: #bbb;
+    background: var(--border);
     border-radius: 1px;
     transition: background 0.15s;
 }
@@ -178,12 +220,12 @@ body {
 }
 
 #taskList .delete-btn:hover {
-    background: #fee2e2;
+    background: var(--danger-bg);
 }
 
 #taskList .delete-btn:hover::before,
 #taskList .delete-btn:hover::after {
-    background: #ef4444;
+    background: var(--danger);
 }
 
 @media (hover: none) {
@@ -195,25 +237,41 @@ body {
 #taskList .time {
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    color: #666;
+    color: var(--text-muted);
     min-width: 50px;
     text-align: right;
     flex-shrink: 0;
 }
 .empty-message {
     text-align: center;
-    color: #999;
+    color: var(--text-light);
     font-size: 14px;
     padding: 20px 0;
 }
 
 .task-counter {
     text-align: right;
-    color: #999;
+    color: var(--text-light);
     font-size: 13px;
 }
 @media (max-width: 445px) {
     #taskInput, #addButton {
         width: 100%;
     }
+}
+.theme-toggle {
+    align-self: flex-start;
+    position: relative;
+    bottom: 25px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.15s;
+    line-height: 1;
+}
+.theme-toggle:hover {
+    background: var(--task-bg);
 }
