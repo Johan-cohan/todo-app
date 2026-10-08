@@ -1,7 +1,6 @@
 # Todo App
 
-![Скриншот приложения](./todo-app.png)
-![Скриншот приложения](./todo-app-dark-theme.png)
+| ![Светлая](./todo-app.png) | ![Темная](./todo-app-dark-theme.png) |
 
 Простой и удобный список задач на чистом JavaScript.
 
