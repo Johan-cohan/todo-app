@@ -4,7 +4,7 @@
     padding: 0;
 }
 :root {
-    --bg: #f4f4f8;
+    --bg: #e8e8e8;
     --card-bg: #fff;
     --task-bg: #f9f9fb;
     --input-bg: #fff;
@@ -67,7 +67,28 @@ body, .app, #taskList li, .input-row input, .input-row button {
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
-
+.search-row {
+    display: flex;
+}
+.search-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size:14px;
+    background: var(--input-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+}
+.search-row input:focus {
+    border-color: var(--primary);
+}
+.search-row input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
 .input-row {
     display: flex;
     gap: 8px;
@@ -81,6 +102,7 @@ body, .app, #taskList li, .input-row input, .input-row button {
     border: 1px solid var(--text-very-light);
     border-radius: 8px;
     font-size: 15px;
+    background: var(--input-bg);
     outline: none;
     transition: border-color 0.2s;
 }
@@ -262,8 +284,6 @@ body, .app, #taskList li, .input-row input, .input-row button {
 }
 .theme-toggle {
     align-self: flex-start;
-    position: relative;
-    bottom: 25px;
     background: transparent;
     border: none;
     font-size: 20px;

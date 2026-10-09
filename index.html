@@ -16,7 +16,10 @@
 </head>
 <body>
     <main class="app">
-        
+        <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">🌃</button>
+        <div class="search-row">
+            <input id="searchInput" type="text" placeholder="Поиск по задачам...">
+        </div>
         <div class="input-row">
             <input id="taskInput" type="text" placeholder="Что нужно сделать?">
             <button id="addButton">Добавить</button>
@@ -24,7 +27,7 @@
         <ul id="taskList"></ul>
         <p id="taskCounter" class="task-counter">Всего: 0</p>
         <p id="emptyMessage" class="empty-message">Пока пусто. Добавь первую задачу 👆</p>
-        <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">🌃</button>
+        
     </main>
     
     <script src="app.js"></script>

@@ -4,21 +4,39 @@ const taskList = document.getElementById("taskList");
 const taskCounter = document.getElementById("taskCounter");
 const emptyMessage = document.getElementById("emptyMessage");
 const themeToggle = document.getElementById("themeToggle");
+const searchInput = document.getElementById("searchInput")
 const THEME_KEY = "theme";
 
 let tasks = [];
 const STORAGE_KEY = "tasks";
 
+let searchQuery = "";
+
 function renderTasks() {
   taskList.innerHTML = "";
-  if (tasks.length === 0) {
+
+  const query = searchQuery.trim().toLowerCase();
+  const filtered = query
+    ? tasks.filter((task) => task.text.toLowerCase().includes(query))
+    : tasks;
+
+  if (filtered.length === 0) {
     emptyMessage.style.display = "block";
     taskCounter.style.display = "none";
+
+    if (query) {
+      emptyMessage.textContent = "Ничего не найдено 🔍";
+    } else {
+      emptyMessage.textContent = "Пока пусто. Добавь первую задачу 👆";
+    }
   } else {
     emptyMessage.style.display = "none";
     taskCounter.style.display = "block";
   }
-  tasks.forEach((task, index) => {
+
+  filtered.forEach((task) => {
+    const index = tasks.indexOf(task);
+
     const li = document.createElement("li");
     const span = document.createElement("span");
     const deleteButton = document.createElement("button");
@@ -72,6 +90,11 @@ function applyTheme(theme) {
     themeToggle.textContent = "🌃";
   }
 }
+
+searchInput.addEventListener("input", (event) => {
+  searchQuery = event.target.value;
+  renderTasks();
+});
 
 function initTheme() {
   const saveTheme = localStorage.getItem(THEME_KEY);
