@@ -4,7 +4,7 @@ const taskList = document.getElementById("taskList");
 const taskCounter = document.getElementById("taskCounter");
 const emptyMessage = document.getElementById("emptyMessage");
 const themeToggle = document.getElementById("themeToggle");
-const searchInput = document.getElementById("searchInput")
+const searchInput = document.getElementById("searchInput");
 const THEME_KEY = "theme";
 
 let tasks = [];
@@ -114,20 +114,18 @@ function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
-function loadTasks() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved === null) return;
+const API_URL = "http://127.0.0.1:8000";
 
-  const parsed = JSON.parse(saved);
-
-  tasks = parsed.map((item) => {
-    if (typeof item === "string") {
-      return { text: item, seconds: 0, running: false };
-    }
-    return { ...item, running: false };
-  });
-  saveTasks();
-  renderTasks();
+async function loadTasks() {
+  try {
+    const response = await fetch(`${API_URL}/tasks`);
+    if (!response.ok) throw new Error("Ошибка загрузки");
+    tasks = await response.json();
+    renderTasks();
+  } catch (error) {
+    console.error("Не удалось загрузить задачу:", error);
+    alert("Сервер недоступен. Запусти backend");
+  }
 }
 
 function startEdit(index) {
@@ -145,15 +143,27 @@ function startEdit(index) {
 
   let saved = false;
 
-  function save() {
+  async function save() {
     if (saved) return;
     saved = true;
 
     const newText = input.value.trim();
-    if (newText) {
-      tasks[index].text = newText;
-      saveTasks();
-      span.textContent = newText;
+    if (newText && newText !== tasks[index].text) {
+      try {
+        const response = await fetch(`${API_URL}/tasks/${tasks[index].id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: newText }),
+        });
+        if (!response.ok) throw new Error("Ошибка обновления");
+
+        const updated = await response.json();
+        tasks[index] = updated;
+        span.textContent = updated.text;
+      } catch (error) {
+        console.error(error);
+        alert("Не удалось сохранить изменения");
+      }
     }
     li.replaceChild(span, input);
   }
@@ -171,20 +181,42 @@ function startEdit(index) {
   input.addEventListener("blur", save);
 }
 
-function addTask() {
+async function addTask() {
   const text = taskInput.value.trim();
   if (!text) return;
 
-  tasks.push({ text, seconds: 0, running: false });
-  taskInput.value = "";
-  renderTasks();
-  saveTasks();
+  try {
+    const response = await fetch(`${API_URL}/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, seconds: 0, running: false }),
+    });
+    if (!response.ok) throw new Error("Ошибка создания");
+
+    const newTask = await response.json();
+    tasks.push(newTask);
+    taskInput.value = "";
+    renderTasks();
+  } catch (error) {
+    console.error(error);
+    alert("Не удалось добавить задачу");
+  }
 }
 
-function removeTask(index) {
-  tasks.splice(index, 1);
-  renderTasks();
-  saveTasks();
+async function removeTask(index) {
+  const task = tasks[index];
+  try {
+    const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Ошибка удаления");
+
+    tasks.splice(index, 1);
+    renderTasks();
+  } catch (error) {
+    console.error(error);
+    alert("Не удалось удалить задачу");
+  }
 }
 
 function formatTime(totalSeconds) {
