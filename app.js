@@ -109,7 +109,7 @@ function toggleTheme() {
 
 themeToggle.addEventListener("click", toggleTheme);
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://todo-app-cu5p.onrender.com/";
 
 async function loadTasks() {
   try {
