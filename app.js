@@ -8,7 +8,6 @@ const searchInput = document.getElementById("searchInput");
 const THEME_KEY = "theme";
 
 let tasks = [];
-const STORAGE_KEY = "tasks";
 
 let searchQuery = "";
 
@@ -109,10 +108,6 @@ function toggleTheme() {
 }
 
 themeToggle.addEventListener("click", toggleTheme);
-
-function saveTasks() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-}
 
 const API_URL = "http://127.0.0.1:8000";
 
@@ -225,17 +220,46 @@ function formatTime(totalSeconds) {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function toggleTimer(index) {
-  if (tasks[index].running) {
-    tasks[index].running = false;
+async function toggleTimer(index) {
+  const task = tasks[index];
+
+  if (!task.running) {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${task.id}/toggle`, {
+        method: "POST",
+      });
+      if (!response.ok) throw new Error("Ошибка toggle");
+
+      const updated = await response.json();
+
+      tasks.forEach((t) => {
+        t.running = t.id === updated.id;
+      });
+
+      updateToggleButtons();
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось запустить таймер");
+    }
   } else {
-    tasks.forEach((task) => {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          seconds: task.seconds,
+          running: false,
+        }),
+      });
+      if (!response.ok) throw new Error("Ошибка паузы");
+
       task.running = false;
-    });
-    tasks[index].running = true;
+      updateToggleButtons();
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось остановить таймер");
+    }
   }
-  saveTasks();
-  updateToggleButtons();
 }
 function updateToggleButtons() {
   tasks.forEach((task, index) => {
@@ -270,8 +294,6 @@ setInterval(() => {
     }
   });
 }, 1000);
-window.addEventListener("beforeunload", () => {
-  saveTasks();
-});
+
 initTheme();
 loadTasks();

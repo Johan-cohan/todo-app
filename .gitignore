@@ -7,6 +7,12 @@ __pycache__/
 backend/*.db
 backend/*.sqlite
 
+#Backup
+backup/
+
 # IDE
 .vscode/
 .idea/
+# Backups
+*_backup.js
+*_backup.py
