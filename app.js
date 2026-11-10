@@ -113,7 +113,7 @@ const API_URL = "https://todo-app-cu5p.onrender.com/";
 
 async function loadTasks() {
   try {
-    const response = await fetch(`${API_URL}/tasks`);
+    const response = await fetch(`${API_URL}/tasks/`);
     if (!response.ok) throw new Error("Ошибка загрузки");
     tasks = await response.json();
     renderTasks();
