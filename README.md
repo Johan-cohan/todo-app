@@ -41,7 +41,7 @@
 - `DELETE /tasks/{id}` — удалить задачу
 - `POST /tasks/{id}/toggle` — запустить/остановить таймер
 
-Документация: [Swagger UI](https://todo-api-xxxx.onrender.com/docs)
+Документация: [Swagger UI](https://todo-app-cu5p.onrender.com/docs)
 
 ## Как запустить локально
 
