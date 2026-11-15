@@ -40,7 +40,7 @@
 - `PATCH /tasks/{id}` — обновить задачу
 - `DELETE /tasks/{id}` — удалить задачу
 - `POST /tasks/{id}/toggle` — запустить/остановить таймер
-
+Живая ссылка: [Todo-app](https://johan-cohan.github.io/todo-app/)
 Документация: [Swagger UI](https://todo-app-cu5p.onrender.com/docs)
 
 ## Как запустить локально
